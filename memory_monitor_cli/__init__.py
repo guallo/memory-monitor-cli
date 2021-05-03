@@ -10,6 +10,9 @@ import plotext as plt
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+__version__ = '0.1.0'
+__author__ = 'The memory-monitor-cli Authors'
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,7 +33,7 @@ def save(snapshots, output_filename):
         lines.append(f'{timestamp} {percentage}')
     data = os.linesep.join(lines)
     compressed_data = zlib.compress(data.encode())
-    
+
     with open(output_filename, 'wb') as f:
         f.write(compressed_data)
 
@@ -42,7 +45,7 @@ def show(snapshots):
 
     xticks = timestamps
     xlabels = [datetime.datetime.fromtimestamp(timestamp).strftime('%H:%M:%S')
-                for timestamp in timestamps]
+               for timestamp in timestamps]
 
     yticks = list(range(0, 101, 10))
     ylabels = [f'{percentage} %' for percentage in yticks]
@@ -135,16 +138,16 @@ def command_show(argv):
         observer.join()
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--logging-level', choices=('DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'), default='INFO')
 
     subparsers = parser.add_subparsers()
 
     parser_run = subparsers.add_parser('run')
-    parser_run.add_argument('--time-window', required=True, type=float)
-    parser_run.add_argument('--time-unit', choices='smhd', default='s')
-    parser_run.add_argument('--frequency', required=True, type=int)
+    parser_run.add_argument('--time-window', type=float, default=1)
+    parser_run.add_argument('--time-unit', choices='smhd', default='m')
+    parser_run.add_argument('--frequency', type=int, default=60)
     parser_run.add_argument('--stream-to-file')
     parser_run.set_defaults(delegate=command_run)
 
@@ -152,13 +155,12 @@ if __name__ == '__main__':
     parser_show.add_argument('--stream-from-file', required=True)
     parser_show.set_defaults(delegate=command_show)
 
-
-    #argv = parser.parse_args(
-    #    '--logging-level=DEBUG run --time-window=1 --time-unit=m --frequency=20 --stream-to-file=memory-timelapse.gz'.split()
-    #)
-    #argv = parser.parse_args(
-    #    'show --stream-from-file=memory-timelapse.gz'.split()
-    #)
+    # argv = parser.parse_args(
+    #    '--logging-level=DEBUG run --time-window=1 --time-unit=m --frequency=20 --stream-to-file=memory-usage.gz'.split()
+    # )
+    # argv = parser.parse_args(
+    #    'show --stream-from-file=memory-usage.gz'.split()
+    # )
 
     argv = parser.parse_args()
 
