@@ -37,8 +37,8 @@ jobs:
         path: dist
     - name: Define SDIST_PKG_NAME and BDIST_WHEEL_PKG_NAME
       run: |
-        echo "::set-env name=SDIST_PKG_NAME::$(cd dist && ls *.tar.gz)"
-        echo "::set-env name=BDIST_WHEEL_PKG_NAME::$(cd dist && ls *.whl)"
+        echo "SDIST_PKG_NAME=$(cd dist && ls *.tar.gz)" >> $GITHUB_ENV
+        echo "BDIST_WHEEL_PKG_NAME=$(cd dist && ls *.whl)" >> $GITHUB_ENV
     - name: Upload ${{ env.BDIST_WHEEL_PKG_NAME }}
       uses: actions/upload-release-asset@v1.0.2
       env:
