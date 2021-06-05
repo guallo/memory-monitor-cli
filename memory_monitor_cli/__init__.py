@@ -1,4 +1,5 @@
 import os
+import os.path
 import time
 import zlib
 import datetime
@@ -96,6 +97,10 @@ def command_run(argv):
 
 
 class FileEventHandler(FileSystemEventHandler):
+    def __init__(self, stream_from_file):
+        self._stream_from_file = stream_from_file
+        super().__init__()
+    
     def on_created(self, event):
         logger.debug('inside FileEventHandler.on_created()')
         super().on_created(event)
@@ -108,7 +113,9 @@ class FileEventHandler(FileSystemEventHandler):
 
     def _show(self, stream_from_file):
         logger.debug('inside FileEventHandler._show()')
-        if not stream_from_file:
+        if not stream_from_file or \
+                os.path.normcase(os.path.abspath(stream_from_file)) != \
+                os.path.normcase(os.path.abspath(self._stream_from_file)):
             return
 
         with open(stream_from_file, 'rb') as f:
@@ -128,7 +135,7 @@ class FileEventHandler(FileSystemEventHandler):
 
 def command_show(argv):
     logger.debug('inside command_show()')
-    event_handler = FileEventHandler()
+    event_handler = FileEventHandler(argv.stream_from_file)
     observer = Observer()
     observer.schedule(event_handler, argv.stream_from_file)
     observer.start()
