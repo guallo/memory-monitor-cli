@@ -11,7 +11,7 @@ import plotext as plt
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __author__ = 'The memory-monitor-cli Authors'
 
 logger = logging.getLogger(__name__)
