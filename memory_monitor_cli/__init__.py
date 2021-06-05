@@ -52,11 +52,14 @@ def show(snapshots):
 
     plt.clp()
     plt.clt()
-    plt.plot(timestamps, percentages)
+    plt.plot(timestamps, percentages, marker='dot')
     plt.ylim(0, 100)
     plt.xticks(xticks, xlabels)
     plt.yticks(yticks, ylabels)
-    plt.nocolor()
+    try:
+        plt.colorless()
+    except AttributeError:
+        plt.nocolor()  # older versions
     plt.show()
 
 
