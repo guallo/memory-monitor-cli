@@ -2,7 +2,7 @@
 
 To install:
 ```shell
-$ pip install memory-monitor-cli
+$ pip3 install memory-monitor-cli
 ```
 
 Monitor the memory with a time window of `1` minute (`m`) and refresh each second (`60` times per minute):
